@@ -1,0 +1,22 @@
+TELA LOGIN
+Ter criado pelo menos um fluxo de login da aplicação. Existem duas formas de implementar:
+Na mesma rota da aplicação, é exibido um campo de e-mail/senha para logar ou fazer o cadastro do usuário. Caso o usuário esteja logado, usar v-if / v-else para mostrar ou não o fluxo de login.
+Caso você queira pode criar uma nova rota com o Vue Router (/login), e junto com o Vuex configurado no template da aplicação e exibido nas aulas, fazer o sistema de login.
+Fazer checagem se um usuário está logado ao acessar a aplicação.
+fazer a merda do botão sair pega
+
+APP
+tudo
+colocar imagens
+deixar dinamico
+
+-----CONCLUIDO-----
+LOGIN
+Possibilidade de se cadastrar.
+Possibilidade de autenticar usando email e senha.
+tela de login vai para a tela home
+firebase instalado
+HOME(APP)
+criado a construção
+vuetify instalado
+

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Biblioteca Digital</h1>
+    </header>
+    
+    <form action="">
+        <div id="form-body">
+        <h2>Crie seu usuario</h2>
+        <div>
+       <div> <label for="Email">Email</label></div>
+        <input type="email" id="email" onchange="onChangeEmail()" placeholder="seu email">
+        <div class="error" id="email-required-error">Email é obrigatório</div>
+        <div class="error" id="email-invalid-error">Email é inválido</div>
+        </div>
+        <div><div><label for="Email">Senha</label></div>
+        <input type="password" id="password" placeholder="criar senha">
+        <div class="error" id="password-required-error">Senha é obrigatório</div>
+        <div class="error" id="password-min-length-error">
+            Senha deve ter pelo menos 6 caracteres
+        </div>
+    </div>
+       <div>
+       <div> <label for="Email">Confirmar</label></div>
+        <input type="password" id="password" onchange="validateFields()" placeholder="confirma senha">
+    <div class="error" id="password-doesnt-match-error">
+                Senha e Confirmar senha devem ser iguais
+            </div>   
+    </div>
+       <div>
+         <button type="button" onclick="registre()" id="login-button" disabled>Login</button>
+        <button type="button" id="recover-password-button" onclick="registre()" disabled>Criar Conta</button>
+    </div>
+</form>    
+    <footer>
+        <div class="link_rodape">
+    <a href="https://www.instagram.com/rayza.carla/"> <img class="icon" src="https://cdn.icon-icons.com/icons2/2717/PNG/512/instagram_logo_icon_173753.png"></a>
+    <a href="https://github.com/Rayza-18"> <img class="icon" src="https://seeklogo.com/images/G/github-logo-7880D80B8D-seeklogo.com.png"></a>
+    </div>
+    <p class="p_rodape" > Rayza - beyond </p>  
+
+    </footer>
+
+
+   
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+    <script src="validacion.js"></script>
+     <script>
+        function validateFields() {
+            const emailValid = isEmailValid();
+            document.getElementById("recover-password-button").disabled = !emailValid;
+
+            const passwordValid = isPasswordValid();
+            document.getElementById("login-button").disabled = !emailValid || !passwordValid;
+        }
+
+        function isEmailValid() {
+            const email = document.getElementById("email").value;
+            if (!email) {
+                return false;
+            }
+            return validateEmail(email);
+        }
+
+        function isPasswordValid() {
+            const password = document.getElementById("password").value;
+            if (!password) {
+                return false;
+            }
+            return true;
+        }
+
+        function validateEmail(email) {
+            return /\S+@\S+\.\S+/.test(email);
+        }
+
+        function login() {
+            window.location.href = "https://projetofirebasetest.web.app";
+        }
+        function registre(){
+
+            const email = form.email().value;
+    const password = form.password().value;
+    firebase.auth().createUserWithEmailAndPassword(
+        email, password
+    ).then(() => {
+        window.location.href = "./login.html";
+    }).catch(error => {
+        alert(getErrorMessage(error));
+    })
+           
+    }
+    function getErrorMessage(error) {
+    if (error.code == "auth/email-already-in-use") {
+        return "Email já está em uso";
+    }
+    return error.message;
+}
+    
+    //FIREBASE
+        const firebaseConfig = {
+    apiKey: "AIzaSyADEZEUvappE3hLg8j8s_lVd6eR3ylj_NY",
+    authDomain: "projetofirebasetest.firebaseapp.com",
+    projectId: "projetofirebasetest",
+    storageBucket: "projetofirebasetest.appspot.com",
+    messagingSenderId: "804880897967",
+    appId: "1:804880897967:web:ef465361cd735b6c02415a"
+  };
+  firebase.initializeApp(firebaseConfig);
+  function onChangeEmail() {
+    const email = form.email().value;
+    form.emailRequiredError().style.display = email ? "none" : "block";
+
+    form.emailInvalidError().style.display = validateEmail(email) ? "none" : "block";
+
+    toggleRegisterButtonDisable();
+}
+
+function onChangePassword() {
+    const password = form.password().value;
+    form.passwordRequiredError().style.display = password ? "none" : "block";
+
+    form.passwordMinLengthError().style.display = password.length >= 6 ? "none" : "block";
+
+    validatePasswordsMatch();
+    toggleRegisterButtonDisable();
+}
+
+function onChangeConfirmPassword() {
+    validatePasswordsMatch();
+    toggleRegisterButtonDisable();
+}
+
+function validatePasswordsMatch() {
+    const password = form.password().value;
+    const confirmPassword = form.confirmPassword().value;
+
+    form.confirmPasswordDoesntMatchError().style.display =
+        password == confirmPassword ? "none" : "block";
+}
+
+function toggleRegisterButtonDisable() {
+    form.registerButton().disabled = !isFormValid();
+}
+
+function isFormValid() {
+    const email = form.email().value;
+    if (!email || !validateEmail(email)) {
+        return false;
+    }
+
+    const password = form.password().value;
+    if (!password || password.length < 6) {
+        return false;
+    }
+
+    const confirmPassword = form.confirmPassword().value;
+    if (password != confirmPassword) {
+        return false;
+    }
+
+    return true;
+}
+
+const form = {
+    confirmPassword: () => document.getElementById('confirmPassword'),
+    confirmPasswordDoesntMatchError: () => document.getElementById('password-doesnt-match-error'),
+    email: () => document.getElementById('email'),
+    emailInvalidError: () => document.getElementById('email-invalid-error'),
+    emailRequiredError: () => document.getElementById('email-required-error'),
+    password: () => document.getElementById('password'),
+    passwordMinLengthError: () => document.getElementById('password-min-length-error'),
+    passwordRequiredError: () => document.getElementById('password-required-error'),
+    registerButton: () => document.getElementById('register-button')
+}
+function onChangeEmail() {
+    toggleButtonsDisable();
+    toggleEmailErrors();
+}
+
+
+
+function isEmailValid() {
+    const email = document.getElementById("email").value;
+    if (!email) {
+        return false;
+    }
+    return validateEmail(email);
+}
+
+function isPasswordValid() {
+    const password = document.getElementById("password").value;
+    if (!password) {
+        return false;
+    }
+    return true;
+}
+
+function validateEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+}
+
+    </script>
+</body>
+</html>

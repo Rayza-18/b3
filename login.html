@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Biblioteca Digital</h1>
+    </header>
+    <form action="">
+    <div> 
+        <div><label for="Email de login">Email de login</label></div>
+        <input type="email" id="email" onchange="onChangeEmail()" placeholder="email">
+        <div class="error" id="email-required-error">Email é obrigatório</div>
+        <div class="error" id="email-invalid-error">Email é inválido</div>
+    </div>
+        
+    <div>         
+        <div><label for="Senha">Senha</label></div>
+        <input type="password" id="password" onchange="onChangePassword()" placeholder="password">
+        <div class="error" id="password-required-error">Senha é obrigatória</div>
+    </div>
+
+    <button type="button" onclick="login()" id="login-button" disabled>Login</button>
+    <button type="button" id="recover-password-button" onclick="registre()" disabled>Criar Conta</button>
+    </form>
+
+    <footer>
+        <div class="link_rodape">
+    <a href="https://www.instagram.com/rayza.carla/"> <img class="icon" src="https://cdn.icon-icons.com/icons2/2717/PNG/512/instagram_logo_icon_173753.png"></a>
+    <a href="https://github.com/Rayza-18"> <img class="icon" src="https://seeklogo.com/images/G/github-logo-7880D80B8D-seeklogo.com.png"></a>
+    </div>
+    <p class="p_rodape" > Rayza - beyond </p>  
+
+    </footer>
+
+<!-----------------------SCRIPT--------------------------->
+    
+    <script src="./validacion.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+<script>
+    //VUE ROUTER
+    name: 'Login',
+    //LOGIN-AVISOS
+  
+
+    function toggleEmailErrors(){
+      const email = document.getElementById("email").value;
+    if (!email) {
+        document.getElementById("email-required-error").style.display = "block";
+    } else {
+        document.getElementById("email-required-error").style.display = "none";
+    }
+    
+    if (validateEmail(email)) {
+        document.getElementById("email-invalid-error").style.display = "none";
+    } else {
+        document.getElementById("email-invalid-error").style.display = "block";
+    }
+}
+
+//ddd
+function onChangePassword() {
+  toggleButtonsDisable();
+  togglePasswordErrors();
+} 
+//ww
+function togglePasswordErrors() {
+  const password = document.getElementById("password").value;
+  if (!password) {
+     document.getElementById("password-required-error").style.display = "block";
+  } else {
+     document.getElementById("password-required-error").style.display = "none";
+  }
+}
+    
+    function toggleButtonsDisable(){
+      const emailValid = isEmailValid();
+      document.getElementById("recover-password-button").disabled = !emailValid;
+  
+      const passwordValid = isPasswordValid();
+      document.getElementById("login-button").disabled = !emailValid || !passwordValid;
+    }
+
+//LOGIN-BTN-LOGIN
+function getErrorMessage(error) {
+        return "Usuário nao encontrado";
+    }
+        function login() {
+          
+            firebase.auth().signInWithEmailAndPassword(
+        form.email().value, form.password().value
+    ).then(response => {
+        window.location.href = "https://projetofirebasetest.web.app";
+    }).catch(error => {
+        alert(getErrorMessage(error));
+    });  
+        }
+      
+//LOGIN-BTN-CRIARCONTA
+        function registre(){
+           window.location.href = "./registrar.html";
+        }
+
+        const form = {
+    email: () => document.getElementById("email"),
+    emailInvalidError: () => document.getElementById("email-invalid-error"),
+    emailRequiredError: () => document.getElementById("email-required-error"),
+    loginButton: () => document.getElementById("login-button"),
+    password: () => document.getElementById("password"),
+    passwordRequiredError: () => document.getElementById("password-required-error"),
+    recoverPasswordButton: () => document.getElementById("recover-password-button"),
+} 
+
+//FIREBASE
+        const firebaseConfig = {
+    apiKey: "AIzaSyADEZEUvappE3hLg8j8s_lVd6eR3ylj_NY",
+    authDomain: "projetofirebasetest.firebaseapp.com",
+    projectId: "projetofirebasetest",
+    storageBucket: "projetofirebasetest.appspot.com",
+    messagingSenderId: "804880897967",
+    appId: "1:804880897967:web:ef465361cd735b6c02415a"
+  };
+  firebase.initializeApp(firebaseConfig);
+  function onChangeEmail() {
+    toggleButtonsDisable();
+    toggleEmailErrors();
+}
+/*
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        window.location.href = "http://localhost:8080/";
+    }
+})
+*/
+
+function isEmailValid() {
+    const email = document.getElementById("email").value;
+    if (!email) {
+        return false;
+    }
+    return validateEmail(email);
+}
+
+function isPasswordValid() {
+    const password = document.getElementById("password").value;
+    if (!password) {
+        return false;
+    }
+    return true;
+}
+
+function validateEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+}
+
+</script>
+</body>
+</html>
